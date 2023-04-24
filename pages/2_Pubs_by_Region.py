@@ -34,7 +34,7 @@ for reg in regions:
     if region == reg:
         reg_df = df[df['Region'] == reg]
         m = folium.Map(location=[reg_df['latitude'].mean(), reg_df['longitude'].mean()],
-                       zoom_start=8, control_scale=True)
+                       zoom_start=14, control_scale=True)
         for i, row in reg_df.iterrows():
             html = f"""
                     <h4>Name: {row["name"]}</h4>
