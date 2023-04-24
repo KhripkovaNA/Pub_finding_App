@@ -7,6 +7,7 @@ FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 IMAGE_PATH = os.path.join(FILE_DIR, "image", "pub.jpg")
 DATA_PATH = os.path.join(FILE_DIR, "data", "pubs.csv")
 
+
 @st.cache_data
 def load_dataset(data_link):
     dataset = pd.read_csv(data_link)
@@ -32,7 +33,7 @@ st.image(img, width=500)
 st.markdown('In this App:')
 
 for color, region in zip(colors, regions):
-    pubs_num = len(df[df['Region'] == region])
+    pubs_num = len(df[df['region'] == region])
     st.write(f':{color}[There are _{pubs_num}_ pubs available for you in **{region}**.]')
 st.write('')
 st.write('')

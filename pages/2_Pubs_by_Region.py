@@ -28,24 +28,28 @@ regions = ['Greater London',
            'Wales']
 
 st.markdown("### Map of Pubs by Region in the UK")
-region = st.selectbox("Select Region", (None, *regions))
+region = st.selectbox("Select Region", ('Region', *regions))
 
 for reg in regions:
     if region == reg:
-        reg_df = df[df['Region'] == reg]
-        m = folium.Map(location=[reg_df['latitude'].mean(), reg_df['longitude'].mean()],
-                       zoom_start=14, control_scale=True)
-        for i, row in reg_df.iterrows():
-            html = f"""
-                    <h4>Name: {row["name"]}</h4>
-                    <p>{row["address"]}</p>
-                    """
-            iframe = folium.IFrame(html=html, width=200, height=150)
-            popup = folium.Popup(iframe)
-            folium.Marker(location=[row['latitude'], row['longitude']],
-                          icon=folium.Icon(color='orange', icon='beer-mug-empty', prefix='fa'),
-                          popup=popup).add_to(m)
-        sw = reg_df[['latitude', 'longitude']].min().values.tolist()
-        ne = reg_df[['latitude', 'longitude']].max().values.tolist()
-        m.fit_bounds([sw, ne])
-        folium_static(m, width=700)
+        areas = df[df['region'] == reg]['area'].unique().tolist()
+        area = st.selectbox("Select Area", areas)
+        for ar in areas:
+            if area == ar:
+                area_df = df[(df['region'] == reg) & (df['area'] == ar)]
+                m = folium.Map(location=[area_df['latitude'].mean(), area_df['longitude'].mean()],
+                               control_scale=True)
+                for i, row in area_df.iterrows():
+                    html = f"""
+                            <h4>Name: {row["name"]}</h4>
+                            <p>{row["address"]}</p>
+                            """
+                    iframe = folium.IFrame(html=html, width=200, height=150)
+                    popup = folium.Popup(iframe)
+                    folium.Marker(location=[row['latitude'], row['longitude']],
+                                  icon=folium.Icon(color='orange', icon='beer-mug-empty', prefix='fa'),
+                                  popup=popup).add_to(m)
+                sw = area_df[['latitude', 'longitude']].min().values.tolist()
+                ne = area_df[['latitude', 'longitude']].max().values.tolist()
+                m.fit_bounds([sw, ne])
+                folium_static(m, width=700)
